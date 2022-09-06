@@ -39,7 +39,7 @@ func (c CLI) execRaw(cmd []string, args []string) ([]byte, error) {
 	}
 	b, err := cc.Output()
 	if err != nil {
-		if ee := err.(*exec.ExitError); ee != nil {
+		if ee, ok := err.(*exec.ExitError); ok {
 			return nil, fmt.Errorf("%s: %s", ee, ee.Stderr)
 		}
 		return nil, err
