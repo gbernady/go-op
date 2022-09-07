@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os/exec"
+	"strings"
 )
 
 // CLI represents the 1Password CLI.
@@ -24,7 +25,7 @@ type CLI struct {
 // Version returns 1Password CLI version.
 func (c CLI) Version() (string, error) {
 	b, err := c.execRaw([]string{"--version"}, nil)
-	return string(b), err
+	return strings.TrimSpace(string(b)), err
 }
 
 func (c CLI) execRaw(cmd []string, args []string) ([]byte, error) {
