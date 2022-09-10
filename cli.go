@@ -16,10 +16,9 @@ type CLI struct {
 	// Config specifies the 1Password CLI configuration directory to use.
 	Config string
 
-	// Env specifies the environment in which 1Password CLI commands will be run.
-	// Each entry is of the form "key=value".
-	// If Env is nil (default), commands will use the current process's environment.
-	Env []string
+	// Path specifies an absolute path to the 1Password CLI executable.
+	// If not set, exec.LookPath() will be utilized to attempt to find the `op` executable on $PATH.
+	Path string
 }
 
 // Version returns 1Password CLI version.
@@ -32,13 +31,25 @@ func (c CLI) execRaw(cmd []string, args []string) ([]byte, error) {
 	if c.Account != "" {
 		cmd = append(cmd, "--account", c.Account)
 	}
-	cmd = append(cmd, args...)
-	cc := exec.Command("op", cmd...)
-	cc.Env = append(cc.Environ(), c.Env...)
-	if errors.Is(cc.Err, exec.ErrDot) {
-		cc.Err = nil
+	if c.Config != "" {
+		cmd = append(cmd, "--config", c.Config)
 	}
-	b, err := cc.Output()
+	cmd = append(cmd, args...)
+
+	path := c.Path
+	if path == "" {
+		p, err := exec.LookPath("op")
+		if err != nil && !errors.Is(err, exec.ErrDot) {
+			return nil, err
+		}
+		path = p
+	}
+
+	op := &exec.Cmd{
+		Path: path,
+		Args: append([]string{path}, cmd...),
+	}
+	b, err := op.Output()
 	if err != nil {
 		if ee, ok := err.(*exec.ExitError); ok {
 			return nil, fmt.Errorf("%s: %s", ee, ee.Stderr)
