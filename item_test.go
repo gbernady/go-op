@@ -2,6 +2,7 @@ package op
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -20,14 +21,14 @@ func TestItemField(t *testing.T) {
 					{
 						ID:        "username",
 						Type:      FieldTypeString,
-						Label:     "user",
+						Label:     "uname",
 						Value:     "foo",
 						Reference: "op://Personal/Foo/username",
 					},
 					{
 						ID:        "password",
 						Type:      FieldTypeConcealed,
-						Label:     "pass",
+						Label:     "passwd",
 						Value:     "bar",
 						Reference: "op://Personal/Foo/password",
 					},
@@ -37,7 +38,7 @@ func TestItemField(t *testing.T) {
 			result: &Field{
 				ID:        "username",
 				Type:      FieldTypeString,
-				Label:     "user",
+				Label:     "uname",
 				Value:     "foo",
 				Reference: "op://Personal/Foo/username",
 			},
@@ -426,7 +427,237 @@ func TestFieldTypeUnmarshalText(t *testing.T) {
 }
 
 func TestListItems(t *testing.T) {
-	// FIXME: implement
+	tests := []struct {
+		name string
+		call func(cli *CLI) (any, error)
+		resp []Item
+		err  string
+	}{
+		{
+			name: "All",
+			call: func(cli *CLI) (any, error) {
+				return cli.ListItems()
+			},
+			resp: []Item{
+				{
+					ID:       "ijfuujah5bfehb4rnx6rkxzpv5",
+					Title:    "Foo",
+					Favorite: true,
+					Version:  1,
+					Vault: Vault{
+						ID:   "ynghx4vwntpezvhqyeglcp7v7f",
+						Name: "Personal",
+					},
+					Category:              CategoryLogin,
+					LastEditedBy:          "F7GSLUVENFGZVF2HVACL3IAS7F",
+					CreatedAt:             time.Date(2022, time.April, 20, 9, 41, 0, 0, time.UTC),
+					UpdatedAt:             time.Date(2022, time.April, 20, 9, 41, 0, 0, time.UTC),
+					AdditionalInformation: "foo@example.com",
+					URLs: []URL{
+						{
+							Label:   "website",
+							Primary: true,
+							HRef:    "https://example.com",
+						},
+					},
+				},
+				{
+					ID:      "utfq63h5szb3jeembehuoioc4f",
+					Title:   "Evil Corp.",
+					Version: 1,
+					Vault: Vault{
+						ID:   "ynghx4vwntpezvhqyeglcp7v7g",
+						Name: "Bar",
+					},
+					Category:     CategoryMembership,
+					LastEditedBy: "F7GSLUVENFGZVF2HVACL3IAS7F",
+					CreatedAt:    time.Date(2022, time.April, 20, 9, 41, 0, 0, time.UTC),
+					UpdatedAt:    time.Date(2022, time.April, 20, 9, 41, 0, 0, time.UTC),
+				},
+			},
+		},
+		{
+			name: "Archived",
+			call: func(cli *CLI) (any, error) {
+				return cli.ListItems(WithIncludeArchive())
+			},
+			resp: []Item{
+				{
+					ID:       "ijfuujah5bfehb4rnx6rkxzpv5",
+					Title:    "Foo",
+					Favorite: true,
+					Version:  1,
+					Vault: Vault{
+						ID:   "ynghx4vwntpezvhqyeglcp7v7f",
+						Name: "Personal",
+					},
+					Category:              CategoryLogin,
+					LastEditedBy:          "F7GSLUVENFGZVF2HVACL3IAS7F",
+					CreatedAt:             time.Date(2022, time.April, 20, 9, 41, 0, 0, time.UTC),
+					UpdatedAt:             time.Date(2022, time.April, 20, 9, 41, 0, 0, time.UTC),
+					AdditionalInformation: "foo@example.com",
+					URLs: []URL{
+						{
+							Label:   "website",
+							Primary: true,
+							HRef:    "https://example.com",
+						},
+					},
+				},
+				{
+					ID:      "utfq63h5szb3jeembehuoioc4f",
+					Title:   "Evil Corp.",
+					Version: 1,
+					Vault: Vault{
+						ID:   "ynghx4vwntpezvhqyeglcp7v7g",
+						Name: "Bar",
+					},
+					Category:     CategoryMembership,
+					LastEditedBy: "F7GSLUVENFGZVF2HVACL3IAS7F",
+					CreatedAt:    time.Date(2022, time.April, 20, 9, 41, 0, 0, time.UTC),
+					UpdatedAt:    time.Date(2022, time.April, 20, 9, 41, 0, 0, time.UTC),
+				},
+				{
+					ID:      "ypaehfyfzrc5xmvosxywp5rwr4",
+					Title:   "Some note",
+					Version: 1,
+					State:   ItemStateArchived,
+					Vault: Vault{
+						ID:   "ynghx4vwntpezvhqyeglcp7v7f",
+						Name: "Personal",
+					},
+					Category:     CategorySecureNote,
+					LastEditedBy: "F7GSLUVENFGZVF2HVACL3IAS7F",
+					CreatedAt:    time.Date(2022, time.April, 20, 9, 41, 0, 0, time.UTC),
+					UpdatedAt:    time.Date(2022, time.April, 20, 9, 41, 0, 0, time.UTC),
+				},
+			},
+		},
+		{
+			name: "Categories",
+			call: func(cli *CLI) (any, error) {
+				return cli.ListItems(WithCategories(CategoryAPICredential, CategoryLogin))
+			},
+			resp: []Item{
+				{
+					ID:       "ijfuujah5bfehb4rnx6rkxzpv5",
+					Title:    "Foo",
+					Favorite: true,
+					Version:  1,
+					Vault: Vault{
+						ID:   "ynghx4vwntpezvhqyeglcp7v7f",
+						Name: "Personal",
+					},
+					Category:              CategoryLogin,
+					LastEditedBy:          "F7GSLUVENFGZVF2HVACL3IAS7F",
+					CreatedAt:             time.Date(2022, time.April, 20, 9, 41, 0, 0, time.UTC),
+					UpdatedAt:             time.Date(2022, time.April, 20, 9, 41, 0, 0, time.UTC),
+					AdditionalInformation: "foo@example.com",
+					URLs: []URL{
+						{
+							Label:   "website",
+							Primary: true,
+							HRef:    "https://example.com",
+						},
+					},
+				},
+			},
+		},
+		{
+			name: "Favorite",
+			call: func(cli *CLI) (any, error) {
+				return cli.ListItems(WithFavorite())
+			},
+			resp: []Item{
+				{
+					ID:       "ijfuujah5bfehb4rnx6rkxzpv5",
+					Title:    "Foo",
+					Favorite: true,
+					Version:  1,
+					Vault: Vault{
+						ID:   "ynghx4vwntpezvhqyeglcp7v7f",
+						Name: "Personal",
+					},
+					Category:              CategoryLogin,
+					LastEditedBy:          "F7GSLUVENFGZVF2HVACL3IAS7F",
+					CreatedAt:             time.Date(2022, time.April, 20, 9, 41, 0, 0, time.UTC),
+					UpdatedAt:             time.Date(2022, time.April, 20, 9, 41, 0, 0, time.UTC),
+					AdditionalInformation: "foo@example.com",
+					URLs: []URL{
+						{
+							Label:   "website",
+							Primary: true,
+							HRef:    "https://example.com",
+						},
+					},
+				},
+			},
+		},
+		{
+			name: "Tags",
+			call: func(cli *CLI) (any, error) {
+				return cli.ListItems(WithTags("foo", "bar baz"))
+			},
+			resp: []Item{
+				{
+					ID:       "ijfuujah5bfehb4rnx6rkxzpv5",
+					Title:    "Foo",
+					Favorite: true,
+					Tags:     []string{"bar baz"},
+					Version:  1,
+					Vault: Vault{
+						ID:   "ynghx4vwntpezvhqyeglcp7v7f",
+						Name: "Personal",
+					},
+					Category:              CategoryLogin,
+					LastEditedBy:          "F7GSLUVENFGZVF2HVACL3IAS7F",
+					CreatedAt:             time.Date(2022, time.April, 20, 9, 41, 0, 0, time.UTC),
+					UpdatedAt:             time.Date(2022, time.April, 20, 9, 41, 0, 0, time.UTC),
+					AdditionalInformation: "foo@example.com",
+					URLs: []URL{
+						{
+							Label:   "website",
+							Primary: true,
+							HRef:    "https://example.com",
+						},
+					},
+				},
+			},
+		},
+		{
+			name: "Vault",
+			call: func(cli *CLI) (any, error) {
+				return cli.ListItems(WithVault("Bar"))
+			},
+			resp: []Item{
+				{
+					ID:      "utfq63h5szb3jeembehuoioc4f",
+					Title:   "Evil Corp.",
+					Version: 1,
+					Vault: Vault{
+						ID:   "ynghx4vwntpezvhqyeglcp7v7g",
+						Name: "Bar",
+					},
+					Category:     CategoryMembership,
+					LastEditedBy: "F7GSLUVENFGZVF2HVACL3IAS7F",
+					CreatedAt:    time.Date(2022, time.April, 20, 9, 41, 0, 0, time.UTC),
+					UpdatedAt:    time.Date(2022, time.April, 20, 9, 41, 0, 0, time.UTC),
+				},
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			cli := &CLI{Path: mockOp(t)}
+			resp, err := test.call(cli)
+			if test.err == "" {
+				assert.Equal(t, test.resp, resp)
+				assert.NoError(t, err)
+			} else {
+				assert.EqualError(t, err, test.err)
+			}
+		})
+	}
 }
 
 func TestCreateItem(t *testing.T) {
@@ -434,17 +665,196 @@ func TestCreateItem(t *testing.T) {
 }
 
 func TestGetItem(t *testing.T) {
-	// FIXME: implement
+	tests := []struct {
+		name string
+		call func(cli *CLI) (any, error)
+		resp *Item
+		err  string
+	}{
+		{
+			name: "Success",
+			call: func(cli *CLI) (any, error) { return cli.GetItem("Foo") },
+			resp: &Item{
+				ID:       "ijfuujah5bfehb4rnx6rkxzpv5",
+				Title:    "Foo",
+				Favorite: true,
+				Tags:     []string{"bar baz"},
+				Version:  1,
+				Vault: Vault{
+					ID:   "ynghx4vwntpezvhqyeglcp7v7f",
+					Name: "Personal",
+				},
+				Category:              CategoryLogin,
+				LastEditedBy:          "F7GSLUVENFGZVF2HVACL3IAS7F",
+				CreatedAt:             time.Date(2022, time.April, 20, 9, 41, 0, 0, time.UTC),
+				UpdatedAt:             time.Date(2022, time.April, 20, 9, 41, 0, 0, time.UTC),
+				AdditionalInformation: "foo@example.com",
+				URLs: []URL{
+					{
+						Label:   "website",
+						Primary: true,
+						HRef:    "https://example.com",
+					},
+				},
+				Sections: []Section{
+					{
+						ID: "add more",
+					},
+				},
+				Fields: []Field{
+					{
+						ID:        "username",
+						Type:      FieldTypeString,
+						Label:     "uname",
+						Value:     "foo",
+						Reference: "op://Personal/Foo/username",
+					},
+					{
+						ID:        "password",
+						Type:      FieldTypeConcealed,
+						Label:     "passwd",
+						Value:     "bar",
+						Reference: "op://Personal/Foo/password",
+					},
+					{
+						ID: "06CDE696F7B54212BE47E7F99CF674F0",
+						Section: Section{
+							ID: "add more",
+						},
+						Type:      FieldTypeString,
+						Label:     "username",
+						Value:     "wat",
+						Reference: "op://Personal/Foo/add more/username",
+					},
+				},
+				Files: []File{
+					{
+						ID:          "toairadal5cpbfbqs72qzrokxb",
+						Name:        "Test file",
+						Size:        13,
+						ContentPath: "/v1/vaults/ynghx4vwntpezvhqyeglcp7v7f/items/ijfuujah5bfehb4rnx6rkxzpv5/files/toairadal5cpbfbqs72qzrokxb/content",
+						Section: Section{
+							ID: "add more",
+						},
+					},
+				},
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			cli := &CLI{Path: mockOp(t)}
+			resp, err := test.call(cli)
+			if test.err == "" {
+				assert.Equal(t, test.resp, resp)
+				assert.NoError(t, err)
+			} else {
+				assert.EqualError(t, err, test.err)
+			}
+		})
+	}
 }
 
 func TestGetItemTemplate(t *testing.T) {
-	// FIXME: implement
+	tests := []struct {
+		name string
+		call func(cli *CLI) (any, error)
+		resp *Item
+		err  string
+	}{
+		{
+			name: "Login",
+			call: func(cli *CLI) (any, error) { return cli.GetItemTemplate(CategoryLogin) },
+			resp: &Item{
+				Title:    "",
+				Category: CategoryLogin,
+				Fields: []Field{
+					{
+						ID:      "username",
+						Type:    FieldTypeString,
+						Purpose: FieldPurposeUsername,
+						Label:   "username",
+						Value:   "",
+					},
+					{
+						ID:      "password",
+						Type:    FieldTypeConcealed,
+						Purpose: FieldPurposePassword,
+						Label:   "password",
+						PasswordDetails: PasswordDetails{
+							Strength: PasswordStrengthTerrible,
+						},
+						Value: "",
+					},
+					{
+						ID:      "notesPlain",
+						Type:    FieldTypeString,
+						Purpose: FieldPurposeNotes,
+						Label:   "notesPlain",
+						Value:   "",
+					},
+				},
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			cli := &CLI{Path: mockOp(t)}
+			resp, err := test.call(cli)
+			if test.err == "" {
+				assert.Equal(t, test.resp, resp)
+				assert.NoError(t, err)
+			} else {
+				assert.EqualError(t, err, test.err)
+			}
+		})
+	}
 }
 
 func TestDeleteItem(t *testing.T) {
-	// FIXME: implement
+	tests := []struct {
+		name string
+		call func(cli *CLI) error
+		err  string
+	}{
+		{
+			name: "Success",
+			call: func(cli *CLI) error { return cli.DeleteItem("Foo") },
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			cli := &CLI{Path: mockOp(t)}
+			err := test.call(cli)
+			if test.err == "" {
+				assert.NoError(t, err)
+			} else {
+				assert.EqualError(t, err, test.err)
+			}
+		})
+	}
 }
 
 func TestArchiveItem(t *testing.T) {
-	// FIXME: implement
+	tests := []struct {
+		name string
+		call func(cli *CLI) error
+		err  string
+	}{
+		{
+			name: "Success",
+			call: func(cli *CLI) error { return cli.ArchiveItem("Foo") },
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			cli := &CLI{Path: mockOp(t)}
+			err := test.call(cli)
+			if test.err == "" {
+				assert.NoError(t, err)
+			} else {
+				assert.EqualError(t, err, test.err)
+			}
+		})
+	}
 }

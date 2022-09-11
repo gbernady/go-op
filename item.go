@@ -7,19 +7,21 @@ import (
 type Item struct {
 	ID                    string    `json:"id"`
 	Title                 string    `json:"title"`
+	Favorite              bool      `json:"favorite"`
+	Tags                  []string  `json:"tags"`
 	Version               int       `json:"version"`
+	State                 ItemState `json:"state"`
 	Vault                 Vault     `json:"vault"`
 	Category              Category  `json:"category"`
 	LastEditedBy          string    `json:"last_edited_by"`
 	CreatedAt             time.Time `json:"created_at"`
 	UpdatedAt             time.Time `json:"updated_at"`
 	AdditionalInformation string    `json:"additional_information"`
+	URLs                  []URL     `json:"urls"`
 
 	Sections []Section `json:"sections"`
-	Tags     []string  `json:"tags"`
 	Fields   []Field   `json:"fields"`
 	Files    []File    `json:"files"`
-	URLs     []URL     `json:"urls"`
 }
 
 func (i Item) Field(name string) *Field {
@@ -230,6 +232,12 @@ type File struct {
 	Section     Section `json:"section"`
 }
 
+type ItemState string
+
+const (
+	ItemStateArchived = "ARCHIVED"
+)
+
 type PasswordDetails struct {
 	Entropy   int64            `json:"entropy"`
 	Generated bool             `json:"generated"`
@@ -291,7 +299,7 @@ func (c *CLI) CreateItem(item *Item) (*Item, error) {
 //   - WithVault()            Only list items in this vault.
 func (c *CLI) GetItem(name string, filters ...Filter) (*Item, error) {
 	var val *Item
-	err := c.execJSON([]string{"item", "get", sanitize(name)}, nil, &val)
+	err := c.execJSON(applyFilters([]string{"item", "get", sanitize(name)}, filters), nil, &val)
 	return val, err
 }
 
@@ -310,6 +318,6 @@ func (c *CLI) DeleteItem(name string) error {
 
 // ArchiveItem archives the item specified by its name, ID, or sharing link.
 func (c *CLI) ArchiveItem(name string) error {
-	_, err := c.execRaw([]string{"item", "delete", "--archive", sanitize(name)}, nil)
+	_, err := c.execRaw([]string{"item", "delete", sanitize(name), "--archive"}, nil)
 	return err
 }
