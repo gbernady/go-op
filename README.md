@@ -1,5 +1,8 @@
 # go-op
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/gbernady/go-op)](https://goreportcard.com/report/github.com/gbernady/go-op)
+[![GoDoc](https://pkg.go.dev/badge/github.com/gbernady/go-op)](https://pkg.go.dev/github.com/gbernady/go-op)
+
 The `go-op` package is a simple Go wrapper for the [1Password CLI](https://developer.1password.com/docs/cli/get-started/).
 
 ## Status
