@@ -1,0 +1,3 @@
+user get "foo@example.com" --public-key
+0
+{"alg":"RSA-OAEP","kid":"rh2vnbjhdnekdpvgoqivu57ahm","ext":true,"e":"AVAD","n":"wrpn5bDMotUqMv6H57kGMVwkfdDLqlZJ83746asOUhnrbX5XF7SIKJ747d33ShApCl-SW6_a4MW6gjtc1fiGLpWsZ8pPEUJi4NBoIbJ6sDMWqX5_v7YY1PjmSXaMq-qg5_vkcPkqdPziSvWuOXtgSxmuseAA0WZiKI_Wyh5MAso4-DDTAJEyeSiVPpjAhgQY-wJJ-HlYoJ6DrypGH26SMjZyoObpT3-hKi2fQzCy2x0KLU2NqW1bsBNzSW-ejuga9feg1PtepmBxTGKua3Z1gFZsJ_uDKjJ-x7DKDA8jkU2XTXn3MnqL031Hfs8-d8GZVOsRs-rF453RpVO-6MXeQS","key_ops":["encrypt"],"kty":"RSA"}

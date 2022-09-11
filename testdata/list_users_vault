@@ -1,0 +1,11 @@
+user list --vault "Qux" --format json --iso-timestamps
+0
+[
+  {
+    "id": "F7GSLUVENFGZVF2HVACL3IAS7G",
+    "name": "Qux",
+    "email": "qux@example.com",
+    "type": "GUEST",
+    "state": "SUSPENDED"
+  }
+]

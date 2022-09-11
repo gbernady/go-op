@@ -64,8 +64,9 @@ const (
 // ListGroups returns the list of groups in the current account.
 //
 // Supported filters:
-// --user user     List groups that a user belongs to.
-// --vault vault   List groups that have direct access to a vault.
+//
+//   - WithUser()    List groups that a user belongs to.
+//   - WithVault()   List groups that have direct access to a vault.
 func (c *CLI) ListGroups(filters ...Filter) ([]Group, error) {
 	var val []Group
 	err := c.execJSON(applyFilters([]string{"group", "list"}, filters), nil, &val)

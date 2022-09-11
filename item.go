@@ -1,7 +1,6 @@
 package op
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -115,7 +114,6 @@ func (c *Category) UnmarshalText(text []byte) error {
 	case "WIRELESS_ROUTER":
 		*c = CategoryWirelessRouter
 	default:
-		return fmt.Errorf("unrecognized category %q", string(text))
 	}
 	return nil
 }
@@ -266,11 +264,11 @@ type URL struct {
 //
 // Supported filters:
 //
-//	--categories categories   Only list items in these categories (comma-separated).
-//	--favorite                Only list favorite items
-//	--include-archive         Include items in the Archive. Can also be set using OP_INCLUDE_ARCHIVE environment variable.
-//	--tags tags               Only list items with these tags (comma-separated).
-//	--vault vault             Only list items in this vault.
+//   - WithIncludeArchive()   Include items in the Archive.
+//   - WithCategories()       Only list items in these categories (comma-separated).
+//   - WithFavorite()         Only list favorite items
+//   - WithTags()             Only list items with these tags (comma-separated).
+//   - WithVault()            Only list items in this vault.
 func (c *CLI) ListItems(filters ...Filter) ([]Item, error) {
 	var val []Item
 	err := c.execJSON(applyFilters([]string{"item", "list"}, filters), nil, &val)
@@ -289,8 +287,8 @@ func (c *CLI) CreateItem(item *Item) (*Item, error) {
 //
 // Supported filters:
 //
-//	--include-archive         Include items in the Archive. Can also be set using OP_INCLUDE_ARCHIVE environment variable.
-//	--vault vault             Only list items in this vault.
+//   - WithIncludeArchive()   Include items in the Archive.
+//   - WithVault()            Only list items in this vault.
 func (c *CLI) GetItem(name string, filters ...Filter) (*Item, error) {
 	var val *Item
 	err := c.execJSON([]string{"item", "get", sanitize(name)}, nil, &val)

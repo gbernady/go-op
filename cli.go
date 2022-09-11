@@ -29,10 +29,10 @@ func (c CLI) Version() (string, error) {
 
 func (c CLI) execRaw(cmd []string, args []string) ([]byte, error) {
 	if c.Account != "" {
-		cmd = append(cmd, "--account", c.Account)
+		cmd = append(cmd, fmt.Sprintf("--account=%s", c.Account))
 	}
 	if c.Config != "" {
-		cmd = append(cmd, "--config", c.Config)
+		cmd = append(cmd, fmt.Sprintf("--config=%s", c.Config))
 	}
 	cmd = append(cmd, args...)
 

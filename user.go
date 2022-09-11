@@ -1,14 +1,19 @@
 package op
 
+import (
+	"strings"
+	"time"
+)
+
 type User struct {
 	ID         string    `json:"id"`
 	Name       string    `json:"name"`
 	Email      string    `json:"email"`
 	Type       UserType  `json:"type"`
 	State      UserState `json:"state"`
-	CreatedAt  string    `json:"created_at"`
-	UpdatedAt  string    `json:"updated_at"`
-	LastAuthAt string    `json:"last_auth_at"`
+	CreatedAt  time.Time `json:"created_at"`
+	UpdatedAt  time.Time `json:"updated_at"`
+	LastAuthAt time.Time `json:"last_auth_at"`
 }
 
 type UserType string
@@ -41,36 +46,36 @@ const (
 //
 // Supported filters:
 //
-//	--group group   List users who belong to a group.
-//	--vault vault   List users who have direct access to vault.
+//   - WithGroup()   List users who belong to a group.
+//   - WithVault()   List users who have direct access to vault.
 func (c *CLI) ListUsers(filters ...Filter) ([]User, error) {
-	var u []User
-	err := c.execJSON(applyFilters([]string{"user", "list"}, filters), nil, u)
-	return u, err
+	var val []User
+	err := c.execJSON(applyFilters([]string{"user", "list"}, filters), nil, &val)
+	return val, err
 }
 
 // GetCurrentUser returns the details of the currently authenticated user.
 func (c *CLI) GetCurrentUser() (*User, error) {
-	var u *User
-	err := c.execJSON([]string{"user", "get", "--me"}, nil, u)
-	return u, err
+	var val *User
+	err := c.execJSON([]string{"user", "get", "--me"}, nil, &val)
+	return val, err
 }
 
 // GetUser returns the details of a user specified by their e-mail address, name, or ID.
 func (c *CLI) GetUser(name string) (*User, error) {
-	var u *User
-	err := c.execJSON([]string{"user", "get", sanitize(name)}, nil, u)
-	return u, err
+	var val *User
+	err := c.execJSON([]string{"user", "get", sanitize(name)}, nil, &val)
+	return val, err
 }
 
 // GetUserFingerprint returns the user's public key fingerprint.
 func (c *CLI) GetUserFingerprint(name string) (string, error) {
 	b, err := c.execRaw([]string{"user", "get", sanitize(name), "--fingerprint"}, nil)
-	return string(b), err
+	return strings.TrimSpace(string(b)), err
 }
 
 // GetUserPublicKey the user's public key.
 func (c *CLI) GetUserPublicKey(name string) (string, error) {
 	b, err := c.execRaw([]string{"user", "get", sanitize(name), "--public-key"}, nil)
-	return string(b), err
+	return strings.TrimSpace(string(b)), err
 }

@@ -9,8 +9,8 @@ type Vault struct {
 //
 // Supported filters:
 //
-//	--user wendy_appleseed@1password.com
-//	--group Security
+//   - WithUser()    List vaults a group has access to.
+//   - WithGroup()   List vaults that a given user has access to.
 func (c *CLI) ListVaults(filters ...Filter) ([]Vault, error) {
 	var val []Vault
 	err := c.execJSON(applyFilters([]string{"vault", "list"}, filters), nil, &val)

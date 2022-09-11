@@ -7,10 +7,44 @@ import (
 	"testing"
 
 	"github.com/fatih/camelcase"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestVersion(t *testing.T) {
-	// FIXME: implement
+	tests := []struct {
+		name string
+		call func(cli *CLI) (any, error)
+		resp string
+		err  string
+	}{
+		{
+			name: "Success",
+			call: func(cli *CLI) (any, error) {
+				return cli.Version()
+			},
+			resp: `2.7.0`,
+		},
+		{
+			name: "ExecNotFound",
+			call: func(cli *CLI) (any, error) {
+				cli.Path = "/foo/op"
+				return cli.Version()
+			},
+			err: "fork/exec /foo/op: no such file or directory",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			cli := &CLI{Path: mockOp(t)}
+			resp, err := test.call(cli)
+			if test.err == "" {
+				assert.Equal(t, test.resp, resp)
+				assert.NoError(t, err)
+			} else {
+				assert.EqualError(t, err, test.err)
+			}
+		})
+	}
 }
 
 func mockOp(t *testing.T) string {

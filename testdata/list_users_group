@@ -1,0 +1,11 @@
+user list --group "Bar" --format json --iso-timestamps
+0
+[
+  {
+    "id": "F7GSLUVENFGZVF2HVACL3IAS7F",
+    "name": "Foo",
+    "email": "foo@example.com",
+    "type": "MEMBER",
+    "state": "ACTIVE"
+  }
+]

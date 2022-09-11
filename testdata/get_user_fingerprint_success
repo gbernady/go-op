@@ -1,0 +1,3 @@
+user get "foo@example.com" --fingerprint
+0
+ad34e5 384737 4c77fa 234ac2 193438 341431 ff782f cf232a
