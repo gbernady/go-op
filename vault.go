@@ -20,6 +20,6 @@ func (c *CLI) ListVaults(filters ...Filter) ([]Vault, error) {
 // GetVault returns the details of a vault specified by its name or ID.
 func (c *CLI) GetVault(name string) (*Vault, error) {
 	var val *Vault
-	err := c.execJSON([]string{"vault", "get"}, nil, &val)
+	err := c.execJSON([]string{"vault", "get", sanitize(name)}, nil, &val)
 	return val, err
 }

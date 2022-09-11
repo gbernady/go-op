@@ -18,7 +18,7 @@ func TestWithCategories(t *testing.T) {
 
 func TestWithGroup(t *testing.T) {
 	assert.Nil(t, WithGroup("")())
-	assert.Equal(t, []string{"--group", "foo"}, WithGroup("foo")())
+	assert.Equal(t, []string{"--group", `"foo"`}, WithGroup("foo")())
 }
 
 func TestWithFavorite(t *testing.T) {
@@ -33,10 +33,10 @@ func TestWithTags(t *testing.T) {
 
 func TestWithUser(t *testing.T) {
 	assert.Nil(t, WithUser("")())
-	assert.Equal(t, []string{"--user", "foo"}, WithUser("foo")())
+	assert.Equal(t, []string{"--user", `"foo"`}, WithUser("foo")())
 }
 
 func TestWithVault(t *testing.T) {
 	assert.Nil(t, WithVault("")())
-	assert.Equal(t, []string{"--vault", "foo"}, WithVault("foo")())
+	assert.Equal(t, []string{"--vault", `"foo"`}, WithVault("foo")())
 }

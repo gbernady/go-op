@@ -59,18 +59,18 @@ func (c *CLI) GetCurrentUser() (*User, error) {
 // GetUser returns the details of a user specified by their e-mail address, name, or ID.
 func (c *CLI) GetUser(name string) (*User, error) {
 	var u *User
-	err := c.execJSON([]string{"user", "get", name}, nil, u)
+	err := c.execJSON([]string{"user", "get", sanitize(name)}, nil, u)
 	return u, err
 }
 
 // GetUserFingerprint returns the user's public key fingerprint.
 func (c *CLI) GetUserFingerprint(name string) (string, error) {
-	b, err := c.execRaw([]string{"user", "get", name, "--fingerprint"}, nil)
+	b, err := c.execRaw([]string{"user", "get", sanitize(name), "--fingerprint"}, nil)
 	return string(b), err
 }
 
 // GetUserPublicKey the user's public key.
 func (c *CLI) GetUserPublicKey(name string) (string, error) {
-	b, err := c.execRaw([]string{"user", "get", name, "--public-key"}, nil)
+	b, err := c.execRaw([]string{"user", "get", sanitize(name), "--public-key"}, nil)
 	return string(b), err
 }

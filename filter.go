@@ -1,7 +1,6 @@
 package op
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -29,7 +28,7 @@ func WithCategories(categories ...Category) Filter {
 		for _, c := range categories {
 			s = append(s, string(c))
 		}
-		return []string{"--categories", fmt.Sprintf(`"%s"`, strings.Join(s, ","))}
+		return []string{"--categories", sanitize(strings.Join(s, ","))}
 	}
 }
 
@@ -42,7 +41,7 @@ func WithGroup(name string) Filter {
 		if name == "" {
 			return nil
 		}
-		return []string{"--group", name}
+		return []string{"--group", sanitize(name)}
 	}
 }
 
@@ -63,7 +62,7 @@ func WithTags(tags ...string) Filter {
 		if len(tags) == 0 {
 			return nil
 		}
-		return []string{"--tags", fmt.Sprintf(`"%s"`, strings.Join(tags, ","))}
+		return []string{"--tags", sanitize(strings.Join(tags, ","))}
 	}
 }
 
@@ -75,7 +74,7 @@ func WithUser(name string) Filter {
 		if name == "" {
 			return nil
 		}
-		return []string{"--user", name}
+		return []string{"--user", sanitize(name)}
 	}
 }
 
@@ -87,7 +86,7 @@ func WithVault(name string) Filter {
 		if name == "" {
 			return nil
 		}
-		return []string{"--vault", name}
+		return []string{"--vault", sanitize(name)}
 	}
 }
 

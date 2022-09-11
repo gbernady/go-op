@@ -1,0 +1,14 @@
+vault list --user "foo@example.com" --format json --iso-timestamps
+0
+[
+  {
+    "id": "ynghx4vwntpezvhqyeglcp7v7f",
+    "name": "Personal",
+    "content_version": 42
+  },
+  {
+    "id": "ynghx4vwntpezvhqyeglcp7v7g",
+    "name": "Bar",
+    "content_version": 1
+  }
+]

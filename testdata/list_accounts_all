@@ -1,0 +1,10 @@
+account list --format json --iso-timestamps
+0
+[
+  {
+    "url": "my.1password.eu",
+    "email": "foo@example.com",
+    "user_uuid": "F7GSLUVENFGZVF2HVACL3IAS7F",
+    "account_uuid": "3TBQIJZ6TVAZ5DM56FZCF653BW"
+  }
+]

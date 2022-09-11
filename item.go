@@ -293,25 +293,25 @@ func (c *CLI) CreateItem(item *Item) (*Item, error) {
 //	--vault vault             Only list items in this vault.
 func (c *CLI) GetItem(name string, filters ...Filter) (*Item, error) {
 	var val *Item
-	err := c.execJSON([]string{"item", "get", name}, nil, &val)
+	err := c.execJSON([]string{"item", "get", sanitize(name)}, nil, &val)
 	return val, err
 }
 
 // GetItemTemplate returns an item template for a given item category.
 func (c *CLI) GetItemTemplate(cat Category) (*Item, error) {
 	var val *Item
-	err := c.execJSON([]string{"item", "template", "get", fmt.Sprintf("'%s'", cat)}, nil, &val)
+	err := c.execJSON([]string{"item", "template", "get", sanitize(string(cat))}, nil, &val)
 	return val, err
 }
 
 // DeleteItem permanently deletes an item specified by its name, ID, or sharing link.
 func (c *CLI) DeleteItem(name string) error {
-	_, err := c.execRaw([]string{"item", "delete", name}, nil)
+	_, err := c.execRaw([]string{"item", "delete", sanitize(name)}, nil)
 	return err
 }
 
 // ArchiveItem archives the item specified by its name, ID, or sharing link.
 func (c *CLI) ArchiveItem(name string) error {
-	_, err := c.execRaw([]string{"item", "delete", "--archive", name}, nil)
+	_, err := c.execRaw([]string{"item", "delete", "--archive", sanitize(name)}, nil)
 	return err
 }

@@ -1,0 +1,9 @@
+vault list --group "Bar" --format json --iso-timestamps
+0
+[
+  {
+    "id": "ynghx4vwntpezvhqyeglcp7v7g",
+    "name": "Bar",
+    "content_version": 1
+  }
+]

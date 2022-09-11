@@ -68,3 +68,7 @@ func (c CLI) execJSON(cmd []string, args []string, v any) error {
 	err = json.Unmarshal(b, &v)
 	return err
 }
+
+func sanitize(s string) string {
+	return fmt.Sprintf("%q", s)
+}
