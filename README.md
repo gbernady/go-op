@@ -1,5 +1,6 @@
 # go-op
 
+[![Build Status](https://github.com/gbernady/go-op/workflows/Build/badge.svg?branch=main)](https://github.com/gbernady/go-op/actions?query=branch%3Amain)
 [![Go Report Card](https://goreportcard.com/badge/github.com/gbernady/go-op)](https://goreportcard.com/report/github.com/gbernady/go-op)
 [![GoDoc](https://pkg.go.dev/badge/github.com/gbernady/go-op)](https://pkg.go.dev/github.com/gbernady/go-op)
 
