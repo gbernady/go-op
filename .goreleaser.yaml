@@ -1,0 +1,11 @@
+builds:
+  - skip: true
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^Merge'
+      - '^ci:'
+      - '^docs:'
+      - '^test:'
