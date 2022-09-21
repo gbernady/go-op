@@ -8,7 +8,7 @@ The `go-op` package is a simple Go wrapper for the [1Password CLI](https://devel
 
 ## Status
 
-**Note:** This project is **highly experimental**. Use at your own risk!
+⚠️ This project is **highly experimental**. Use at your own risk!
 
 ### Supported Features
 
@@ -17,8 +17,8 @@ The `go-op` package is a simple Go wrapper for the [1Password CLI](https://devel
 - [ ] document
 - [ ] events-api
 - [x] groups (list, get)
-- [x] item (list, create, get, delete)
-- [x] user (list, get, get current, get fingerprint, get public key)
+- [x] item (list, get, delete)
+- [x] user (list, get, get-current, get-fingerprint, get-public-key)
 - [x] vault (list, get)
 - [x] version
 
