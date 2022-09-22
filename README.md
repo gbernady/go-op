@@ -8,7 +8,7 @@ The `go-op` package is a simple Go wrapper for the [1Password CLI](https://devel
 
 ## Status
 
-⚠️ This project is **highly experimental**. Use at your own risk!
+⚠️ WARNING: This project is **experimental**. Things might break or not work as expected.
 
 ### Supported Features
 
